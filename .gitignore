@@ -1,0 +1,115 @@
+# Compiled object files
+*.o
+*.obj
+.idea
+# Compiled executables
+system_monitor
+*.exe
+*.out
+
+# Compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled static libraries
+*.a
+*.lib
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Compiler-specific files
+*.gch
+*.pch
+
+# CMake build files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+!cmake_uninstall.cmake.in
+install_manifest.txt
+CTestTestfile.cmake
+_deps/
+
+# Build directories
+build/
+Build/
+debug/
+Debug/
+release/
+Release/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.*.tmp
+*.tmp
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Core dumps
+core
+core.*
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Log files
+*.log
+
+# Temporary files
+*.temp
+*.tmp
+
+# Package files
+*.tar.gz
+*.zip
+*.7z
+*.rar
+
+# Dependency directories (if using package managers)
+node_modules/
+vendor/
+
+# Coverage reports
+*.gcov
+*.gcda
+*.gcno
+
+# Profiling data
+gmon.out
+
+# Valgrind output
+valgrind-out.txt
+
+# Tags files
+tags
+TAGS
+
+# Local configuration files
+.env
+.env.local
+config.local
+
+# Test output
+test_results/
+*.test
