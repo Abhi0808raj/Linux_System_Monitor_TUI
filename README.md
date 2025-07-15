@@ -220,15 +220,3 @@ make
 
 - **Qt6 GUI Version**: A modern GUI version of this system monitor built with Qt6 is available in a separate repository
 - Both versions share similar core functionality but with different user interfaces
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
-
-## License
-
-This project is open source. Please check the LICENSE file for details.
-
-## Author
-
-Created as a learning project to explore Linux system programming and terminal user interfaces.
