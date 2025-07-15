@@ -8,10 +8,10 @@ A lightweight, real-time system monitoring tool for Linux systems with a Termina
 - **Memory Monitoring**: Display total memory and current utilization
 - **Process Information**: Show running process count
 - **Top Processes**: Display the top 10 processes sorted by CPU usage with:
-    - Process ID (PID)
-    - CPU usage percentage
-    - RAM usage in MB
-    - Process name
+  - Process ID (PID)
+  - CPU usage percentage
+  - RAM usage in MB
+  - Process name
 - **Live Updates**: Refreshes every second for real-time monitoring
 - **Clean TUI Interface**: Uses ncurses for a clean terminal interface
 
@@ -38,6 +38,7 @@ PID     CPU%    RAM (MB) NAME
 
 - Linux operating system
 - g++ compiler with C++17 support
+- CMake (version 3.16 or higher)
 - ncurses development library
 
 ### Installing Dependencies
@@ -45,21 +46,21 @@ PID     CPU%    RAM (MB) NAME
 **Ubuntu/Debian:**
 ```bash
 sudo apt-get update
-sudo apt-get install build-essential libncurses5-dev libncurses5
+sudo apt-get install build-essential cmake libncurses5-dev libncurses5 pkg-config
 ```
 
 **CentOS/RHEL/Fedora:**
 ```bash
 # CentOS/RHEL
-sudo yum install gcc-c++ ncurses-devel
+sudo yum install gcc-c++ cmake ncurses-devel pkgconfig
 
 # Fedora
-sudo dnf install gcc-c++ ncurses-devel
+sudo dnf install gcc-c++ cmake ncurses-devel pkgconfig
 ```
 
 **Arch Linux:**
 ```bash
-sudo pacman -S base-devel ncurses
+sudo pacman -S base-devel cmake ncurses pkgconf
 ```
 
 ## Installation
@@ -72,12 +73,48 @@ cd system-monitor-tui
 
 2. Build the project:
 ```bash
+mkdir build
+cd build
+cmake ..
 make
 ```
 
 3. Run the system monitor:
 ```bash
 ./system_monitor
+```
+
+### Alternative Build Options
+
+**Release build (optimized):**
+```bash
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+```
+
+**Debug build:**
+```bash
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+make
+```
+
+**Install system-wide:**
+```bash
+sudo make install
+```
+
+**Uninstall:**
+```bash
+sudo make uninstall
+```
+
+**Create package:**
+```bash
+make package
 ```
 
 ## Usage
@@ -93,19 +130,21 @@ The monitor will display real-time system information and update every second. P
 
 ```
 system-monitor-tui/
-├── Makefile              # Build configuration
+├── CMakeLists.txt       # CMake build configuration
+├── cmake_uninstall.cmake.in  # Uninstall script template
 ├── README.md            # This file
 ├── include/             # Header files
 │   ├── cpu.h           # CPU monitoring functions
 │   ├── display.h       # Display/UI functions
 │   ├── memory.h        # Memory monitoring functions
 │   └── process.h       # Process monitoring functions
-└── src/                # Source files
-    ├── main.cpp        # Main entry point
-    ├── cpu.cpp         # CPU usage implementation
-    ├── display.cpp     # ncurses display implementation
-    ├── memory.cpp      # Memory usage implementation
-    └── process.cpp     # Process monitoring implementation
+├── src/                # Source files
+│   ├── main.cpp        # Main entry point
+│   ├── cpu.cpp         # CPU usage implementation
+│   ├── display.cpp     # ncurses display implementation
+│   ├── memory.cpp      # Memory usage implementation
+│   └── process.cpp     # Process monitoring implementation
+└── build/              # Build directory (created during build)
 ```
 
 ## Technical Details
@@ -115,22 +154,31 @@ The system monitor reads from Linux's `/proc` filesystem to gather system inform
 - **CPU Usage**: Calculated from `/proc/stat` using idle time differences
 - **Memory Info**: Retrieved from `/proc/meminfo` (MemTotal and MemAvailable)
 - **Process Data**: Collected from `/proc/[pid]/` directories including:
-    - `/proc/[pid]/comm` for process names
-    - `/proc/[pid]/stat` for CPU times
-    - `/proc/[pid]/status` for memory usage (VmRSS)
+  - `/proc/[pid]/comm` for process names
+  - `/proc/[pid]/stat` for CPU times
+  - `/proc/[pid]/status` for memory usage (VmRSS)
 
 ## Building
 
-The project uses a simple Makefile with the following targets:
+The project uses CMake for building with the following options:
 
+**Build targets:**
 - `make` or `make all`: Build the system monitor
-- `make clean`: Remove object files and executable
+- `make clean`: Remove build files
+- `make install`: Install system-wide (requires sudo)
+- `make uninstall`: Remove installed files (requires sudo)
+- `make package`: Create distribution package
 
-Compiler flags:
-- `-std=c++17`: Use C++17 standard
-- `-Wall -Wextra`: Enable comprehensive warnings
-- `-Iinclude`: Include header directory
-- `-lncurses`: Link ncurses library
+**CMake options:**
+- `-DCMAKE_BUILD_TYPE=Release`: Optimized build (default)
+- `-DCMAKE_BUILD_TYPE=Debug`: Debug build with symbols
+- `-DCMAKE_INSTALL_PREFIX=/usr/local`: Set installation prefix
+
+**Build configuration:**
+- C++17 standard required
+- Compiler flags: `-Wall -Wextra` for warnings
+- Debug: `-g -O0` for debugging
+- Release: `-O3 -DNDEBUG` for optimization
 
 ## Troubleshooting
 
@@ -141,10 +189,16 @@ The monitor reads from `/proc` which should be accessible to all users. If you e
 If you get linking errors, ensure ncurses development libraries are installed:
 ```bash
 # Ubuntu/Debian
-sudo apt-get install libncurses5-dev
+sudo apt-get install libncurses5-dev pkg-config
 
 # CentOS/RHEL
-sudo yum install ncurses-devel
+sudo yum install ncurses-devel pkgconfig
+```
+
+**CMake errors:**
+Ensure you have CMake 3.16 or higher:
+```bash
+cmake --version  # Should be 3.16 or higher
 ```
 
 **Build Errors:**
@@ -153,7 +207,28 @@ Ensure you have a C++17 compatible compiler:
 g++ --version  # Should be 7.0 or higher
 ```
 
+If you encounter build issues, try cleaning the build directory:
+```bash
+rm -rf build
+mkdir build
+cd build
+cmake ..
+make
+```
+
 ## Related Projects
 
 - **Qt6 GUI Version**: A modern GUI version of this system monitor built with Qt6 is available in a separate repository
 - Both versions share similar core functionality but with different user interfaces
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
+
+## License
+
+This project is open source. Please check the LICENSE file for details.
+
+## Author
+
+Created as a learning project to explore Linux system programming and terminal user interfaces.
